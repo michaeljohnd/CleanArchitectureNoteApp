@@ -1,5 +1,6 @@
 package com.michael.noteapp.feature_note.presentation.notes
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,8 +20,12 @@ import androidx.navigation.NavController
 import com.michael.noteapp.feature_note.presentation.notes.components.NoteItem
 import com.michael.noteapp.feature_note.presentation.notes.components.OrderSection
 import com.michael.noteapp.feature_note.presentation.util.Screen
+import com.michael.noteapp.feature_note.presentation.components.ComposeFAB
+import com.michael.noteapp.feature_note.presentation.components.ComposeIconButton
+import com.michael.noteapp.feature_note.presentation.components.ComposeText
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalAnimationApi
 @Composable
 fun NotesScreen(
@@ -33,14 +38,12 @@ fun NotesScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Screen.AddEditNoteScreen.route)
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
-            }
+            ComposeFAB(
+                onClick = { navController.navigate(Screen.AddEditNoteScreen.route) },
+                backGroundColor = MaterialTheme.colors.primary,
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add Note"
+            )
         },
         scaffoldState = scaffoldState
     ) {
@@ -54,19 +57,16 @@ fun NotesScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                ComposeText(
                     text = "Your note",
                     style = MaterialTheme.typography.h4
                 )
-                IconButton(
-                    onClick = {
-                        viewModel.onEvent(NotesEvent.ToggleOrderSection)
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Sort,
-                        contentDescription = "Sort"
-                    )
+                ComposeIconButton(modifier = Modifier,
+                    imageVector = Icons.Default.Sort,
+                    contentDescription = "Sort",
+                    tint = MaterialTheme.colors.primary,
+                    ) {
+                    viewModel.onEvent(NotesEvent.ToggleOrderSection)
                 }
             }
             AnimatedVisibility(

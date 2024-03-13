@@ -1,5 +1,6 @@
 package com.michael.noteapp.feature_note.presentation.add_edit_note
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -9,24 +10,32 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.michael.noteapp.feature_note.domain.model.Note
 import com.michael.noteapp.feature_note.presentation.add_edit_note.components.TransparentHintTextField
+import com.michael.noteapp.feature_note.presentation.components.ComposeFAB
+import com.michael.noteapp.feature_note.presentation.components.ComposeIconButton
+import com.michael.noteapp.feature_note.presentation.components.ComposeText
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AddEditNoteScreen(
     navController: NavController,
@@ -62,14 +71,12 @@ fun AddEditNoteScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = "Save note")
-            }
+            ComposeFAB(
+                onClick = { viewModel.onEvent(AddEditNoteEvent.SaveNote) },
+                backGroundColor = MaterialTheme.colors.primary,
+                imageVector = Icons.Default.Save,
+                contentDescription = "Save note"
+            )
         },
         scaffoldState = scaffoldState
     ) {
@@ -79,6 +86,19 @@ fun AddEditNoteScreen(
                 .background(noteBackgroundAnimatable.value)
                 .padding(16.dp)
         ) {
+            Row (
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.Start
+            ){
+                ComposeIconButton(
+                    modifier = Modifier,
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.Black
+                ) {
+                    navController.popBackStack()
+                }
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

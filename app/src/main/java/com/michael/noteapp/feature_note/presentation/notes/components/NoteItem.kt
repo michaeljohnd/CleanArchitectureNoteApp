@@ -1,35 +1,25 @@
 package com.michael.noteapp.feature_note.presentation.notes.components
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.ColorUtils
 import com.michael.noteapp.feature_note.domain.model.Note
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
-import org.w3c.dom.Text
+import com.michael.noteapp.feature_note.presentation.components.ComposeCanvas
+import com.michael.noteapp.feature_note.presentation.components.ComposeNoteText
+import com.michael.noteapp.feature_note.presentation.components.ComposeIconButton
 
 @Composable
 fun NoteItem(
@@ -42,109 +32,42 @@ fun NoteItem(
     Box(
         modifier = modifier
     ) {
-        Canvas(modifier = Modifier.matchParentSize()) {
-            val clipPath = Path().apply {
-                lineTo(size.width - cutCornerSize.toPx(), 0f)
-                lineTo(size.width, cutCornerSize.toPx())
-                lineTo(size.width, size.height)
-                lineTo(0f, size.height)
-                close()
-            }
-
-            clipPath(clipPath) {
-                drawRoundRect(
-                    color = Color(note.color),
-                    size = size,
-                    cornerRadius = CornerRadius(cornerRadius.toPx())
-                )
-                drawRoundRect(
-                    color = Color(
-                        ColorUtils.blendARGB(note.color, 0x000000, 0.2f)
-                    ),
-                    topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
-                    size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
-                    cornerRadius = CornerRadius(cornerRadius.toPx())
-                )
-            }
-        }
-//        ComposeCanvas(modifier = Modifier.matchParentSize(), note, cornerRadius, cutCornerSize)
+        ComposeCanvas(modifier = Modifier.matchParentSize(), note, cornerRadius, cutCornerSize)
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
                 .padding(end = 32.dp)
         ) {
-            Text(
+
+            ComposeNoteText(
                 text = note.title,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.h5,
                 color = MaterialTheme.colors.onSurface,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overFlow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
             )
+
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
+            ComposeNoteText(
                 text = note.content,
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.onSurface,
                 maxLines = 10,
-                overflow = TextOverflow.Ellipsis
+                overFlow = TextOverflow.Ellipsis,
+                fontWeight = null,
+                modifier = Modifier
             )
         }
-//        DeleteIconButton(modifier = Modifier.align(Alignment.BottomEnd), onDeleteClick)
-        IconButton(
-            onClick = onDeleteClick,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete note",
-                tint = MaterialTheme.colors.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun DeleteIconButton(modifier: Modifier, onDeleteClick: () -> Unit){
-    IconButton(
-        modifier = modifier,
-        onClick = onDeleteClick,
-    ) {
-        Icon(
+        ComposeIconButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
             imageVector = Icons.Default.Delete,
-            contentDescription = "Delete note",
-            tint = MaterialTheme.colors.onSurface
+            contentDescription = "Delete Note",
+            tint = MaterialTheme.colors.onSurface,
+            onDeleteClick
         )
     }
 }
 
-@Composable
-private fun ComposeCanvas(modifier: Modifier, note: Note, cornerRadius: Dp, cutCornerSize: Dp){
-    Canvas(
-        modifier = modifier
-    ) {
-        val clipPath = Path().apply {
-            lineTo(size.width - cutCornerSize.toPx(), 0f)
-            lineTo(size.width, cutCornerSize.toPx())
-            lineTo(size.width, size.height)
-            lineTo(0f, size.height)
-            close()
-        }
-
-        clipPath(clipPath) {
-            drawRoundRect(
-                color = Color(note.color),
-                size = size,
-                cornerRadius = CornerRadius(cornerRadius.toPx())
-            )
-            drawRoundRect(
-                color = Color(
-                    ColorUtils.blendARGB(note.color, 0x000000, 0.2f)
-                ),
-                topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
-                size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
-                cornerRadius = CornerRadius(cornerRadius.toPx())
-            )
-        }
-    }
-}
