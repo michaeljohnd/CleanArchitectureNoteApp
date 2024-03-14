@@ -97,6 +97,9 @@ fun NotesScreen(
                                             "?noteId=${note.id}&noteColor=${note.color}"
                                 )
                             },
+                        onStarClick ={
+
+                        },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
                             scope.launch {
